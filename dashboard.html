@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Brooding Systems Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #0095f6;
+            color: white;
+            padding: 10px 20px;
+        }
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 5px;
+        }
+        .user-name {
+            font-size: 14px;
+        }
+        .dashboard {
+            display: flex;
+            height: calc(100vh - 60px);
+        }
+        .sidebar {
+            width: 200px;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .widget {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .profile-form, #settingsForm {
+            display: grid;
+            gap: 10px;
+        }
+        .profile-form input, .profile-form select,
+        #settingsForm input, #settingsForm select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .profile-picture {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #0095f6;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 5px 0;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0077c5;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Smart Brooding Systems Dashboard</h1>
+        <div class="user-info">
+            <img src="https://via.placeholder.com/40" alt="User Avatar" class="user-avatar" id="headerUserAvatar">
+            <span class="user-name" id="headerUserName">John Doe</span>
+        </div>
+    </div>
+    <div class="dashboard">
+        <div class="sidebar">
+            <h2>Menu</h2>
+            <ul>
+                <li><a href="#" id="homeLink">Home</a></li>
+                <li><a href="#" id="profileLink">Profile</a></li>
+                <li><a href="#" id="settingsLink">Settings</a></li>
+            </ul>
+        </div>
+        <div class="content" id="dashboardContent">
+            <!-- Initial content will be loaded here -->
+        </div>
+    </div>
+    <script>
+        // Home content
+        document.getElementById('homeLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('dashboardContent').innerHTML = `
+                <div class="widget">
+                    <h3>Smart Brooding Systems Overview</h3>
+                    <p>Our smart brooding system helps you maintain optimal conditions for your poultry, ensuring healthy growth and improved productivity.</p>
+                    <h4>Key Features:</h4>
+                    <ul>
+                        <li>Temperature Control: Maintain ideal temperatures for different growth stages.</li>
+                        <li>Humidity Management: Monitor and adjust humidity levels for optimal comfort.</li>
+                        <li>Ventilation Control: Ensure proper air quality and circulation.</li>
+                        <li>Lighting Schedule: Automate lighting to promote healthy growth cycles.</li>
+                        <li>Feed and Water Monitoring: Track consumption and automate replenishment.</li>
+                    </ul>
+                    <h4>Current Status:</h4>
+                    <p>Temperature: 32°C | Humidity: 65% | Ventilation: Normal | Lights: On</p>
+                    <button onclick="alert('Adjusting temperature...')">Adjust Temperature</button>
+                    <button onclick="alert('Adjusting humidity...')">Adjust Humidity</button>
+                </div>
+            `;
+        });
+
+        // Profile content
+        document.getElementById('profileLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('dashboardContent').innerHTML = `
+                <div class="widget">
+                    <h3>Edit Profile</h3>
+                    <form class="profile-form" id="profileForm">
+                        <img src="https://via.placeholder.com/150" alt="Profile Picture" class="profile-picture" id="profilePicture">
+                        <input type="file" id="profilePictureUpload" accept="image/*">
+                        <input type="text" id="firstName" placeholder="First Name" required>
+                        <input type="text" id="lastName" placeholder="Last Name" required>
+                        <input type="email" id="email" placeholder="Email" required>
+                        <input type="tel" id="phone" placeholder="Phone Number">
+                        <select id="role">
+                            <option value="">Select Role</option>
+                            <option value="farmer">Farmer</option>
+                            <option value="technician">Technician</option>
+                            <option value="manager">Manager</option>
+                        </select>
+                        <input type="text" id="farmName" placeholder="Farm Name">
+                        <textarea id="bio" placeholder="Brief bio"></textarea>
+                        <button type="submit">Save Changes</button>
+                    </form>
+                </div>
+            `;
+
+            // Handle profile picture upload
+            document.getElementById('profilePictureUpload').addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        document.getElementById('profilePicture').src = e.target.result;
+                        document.getElementById('headerUserAvatar').src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Handle form submission
+            document.getElementById('profileForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Update the header user name
+                const firstName = document.getElementById('firstName').value;
+                const lastName = document.getElementById('lastName').value;
+                document.getElementById('headerUserName').textContent = `${firstName} ${lastName}`;
+                // Here you would typically send the data to a server
+                alert('Profile updated successfully!');
+            });
+        });
+
+        // Settings content
+        document.getElementById('settingsLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('dashboardContent').innerHTML = `
+                <div class="widget">
+                    <h3>Settings</h3>
+                    <form id="settingsForm">
+                        <h4>System Preferences</h4>
+                        <div>
+                            <label for="temperatureUnit">Temperature Unit:</label>
+                            <select id="temperatureUnit">
+                                <option value="celsius">Celsius</option>
+                                <option value="fahrenheit">Fahrenheit</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="language">Language:</label>
+                            <select id="language">
+                                <option value="en">English</option>
+                                <option value="es">Español</option>
+                                <option value="fr">Français</option>
+                            </select>
+                        </div>
+                        
+                        <h4>Notifications</h4>
+                        <div>
+                            <input type="checkbox" id="emailNotifications">
+                            <label for="emailNotifications">Receive email notifications</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" id="smsNotifications">
+                            <label for="smsNotifications">Receive SMS notifications</label>
+                        </div>
+                        <div>
+                            <label for="notificationFrequency">Notification Frequency:</label>
+                            <select id="notificationFrequency">
+                                <option value="realtime">Real-time</option>
+                                <option value="hourly">Hourly</option>
+                                <option value="daily">Daily</option>
+                            </select>
+                        </div>
+                        
+                        <h4>Alert Thresholds</h4>
+                        <div>
+                            <label for="tempThresholdHigh">High Temperature Alert (°C):</label>
+                            <input type="number" id="tempThresholdHigh" min="20" max="40" step="0.1">
+                        </div>
+                        <div>
+                            <label for="tempThresholdLow">Low Temperature Alert (°C):</label>
+                            <input type="number" id="tempThresholdLow" min="15" max="35" step="0.1">
+                        </div>
+                        <div>
+                            <label for="humidityThresholdHigh">High Humidity Alert (%):</label>
+                            <input type="number" id="humidityThresholdHigh" min="50" max="90" step="1">
+                        </div>
+                        <div>
+                            <label for="humidityThresholdLow">Low Humidity Alert (%):</label>
+                            <input type="number" id="humidityThresholdLow" min="30" max="70" step="1">
+                        </div>
+                        
+                        <h4>Data Management</h4>
+                        <div>
+                            <label for="dataRetentionPeriod">Data Retention Period:</label>
+                            <select id="dataRetentionPeriod">
+                                <option value="1month">1 Month</option>
+                                <option value="3months">3 Months</option>
+                                <option value="6months">6 Months</option>
+                                <option value="1year">1 Year</option>
+                            </select>
+                        </div>
+                        <div>
+                            <button type="button" onclick="alert('Data export initiated')">Export Historical Data</button>
+                        </div>
+                        
+                        <h4>Security</h4>
+                        <div>
+                            <button type="button" onclick="alert('Password change form would appear here')">Change Password</button>
+                        </div>
+                        <div>
+                            <input type="checkbox" id="twoFactorAuth">
+                            <label for="twoFactorAuth">Enable Two-Factor Authentication</label>
+                        </div>
+                        
+                        <button type="submit">Save Settings</button>
+                    </form>
+                </div>
+            `;
+
+            document.getElementById('settingsForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Here you would typically send the settings to a server
+                alert('Settings saved successfully!');
+            });
+        });
+
+        // Load initial content (e.g., home page)
+        document.getElementById('homeLink').click();
+    </script>
+</body>
+</html>
